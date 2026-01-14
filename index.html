@@ -1,0 +1,190 @@
+﻿<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>Ramadan Countdown – Luxury Edition</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
+
+*{box-sizing:border-box;font-family:'Cairo',sans-serif}
+
+body{
+margin:0;min-height:100vh;overflow:hidden;
+background:linear-gradient(120deg,#020024,#05054e,#000);
+display:flex;justify-content:center;align-items:center;
+color:white;
+padding:20px;
+}
+
+/* 🌌 خلفية متحركة */
+.bg{
+position:fixed;inset:-50%;
+background:
+radial-gradient(circle at 20% 20%,#00ffe040,transparent 40%),
+radial-gradient(circle at 80% 80%,#ffd70030,transparent 40%);
+animation:bgMove 25s linear infinite;
+z-index:0;
+}
+@keyframes bgMove{
+0%{transform:translate(0,0)}
+100%{transform:translate(-50%,-50%)}
+}
+
+/* 🏮 فوانيس */
+.lantern{
+position:absolute;width:40px;height:60px;
+background:linear-gradient(#ffd700,#ffae00);
+border-radius:10px;
+box-shadow:0 0 30px #ffd700;
+animation:floatLantern 6s ease-in-out infinite;
+z-index:1;
+}
+@keyframes floatLantern{
+0%,100%{transform:translateY(0)}
+50%{transform:translateY(25px)}
+}
+
+/* 🕌 الكارد */
+.card{
+position:relative;z-index:2;
+background:linear-gradient(180deg,rgba(255,255,255,.15),rgba(255,255,255,.05));
+backdrop-filter:blur(25px);
+border-radius:35px;
+padding:clamp(25px,5vw,45px);
+width:100%;
+max-width:420px;
+box-shadow:
+0 0 80px rgba(0,255,255,.35),
+inset 0 0 30px rgba(255,255,255,.2);
+text-align:center;
+}
+
+/* 🌙 الهلال */
+.moon{
+position:absolute;top:-60px;right:-60px;
+width:150px;height:150px;border-radius:50%;
+background:radial-gradient(circle at 30% 30%,#fff,#ffd700);
+box-shadow:0 0 80px #ffd700;
+animation:moonFloat 8s ease-in-out infinite;
+}
+@keyframes moonFloat{
+0%,100%{transform:translateY(0)}
+50%{transform:translateY(18px)}
+}
+
+h1{
+font-size:clamp(1.8em,6vw,2.4em);
+margin-bottom:5px;
+color:#ffd700;text-shadow:0 0 25px #ffd700;
+}
+.subtitle{
+opacity:.9;
+margin-bottom:30px;
+font-size:clamp(.9em,3vw,1em);
+}
+
+/* ⏳ العداد */
+.timer{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:clamp(8px,2vw,15px);
+}
+.unit{
+background:rgba(0,0,0,.45);
+border-radius:22px;
+padding:clamp(12px,3vw,18px) 5px;
+box-shadow:
+inset 0 0 20px rgba(0,255,255,.4),
+0 0 25px rgba(0,255,255,.25);
+}
+.value{
+font-size:clamp(1.6em,5vw,2.3em);
+font-weight:900;
+color:#00ffe0;
+text-shadow:0 0 15px #00ffe0;
+}
+.label{
+font-size:clamp(.7em,2.5vw,.85em);
+opacity:.85
+}
+
+/* 🎵 زر */
+.btn{
+margin-top:25px;
+padding:14px 30px;border:none;border-radius:40px;
+font-size:1em;font-weight:700;
+cursor:pointer;
+background:linear-gradient(45deg,#ffd700,#00ffe0);
+box-shadow:0 0 35px rgba(255,215,0,.8);
+transition:.3s;
+}
+.btn:hover{transform:scale(1.07)}
+
+/* 📱 شاشات صغيرة */
+@media (max-width:480px){
+.timer{grid-template-columns:repeat(2,1fr)}
+.moon{width:110px;height:110px;top:-45px;right:-45px}
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg"></div>
+
+<div class="lantern" style="left:8%;top:12%"></div>
+<div class="lantern" style="right:10%;top:22%;animation-delay:2s"></div>
+
+<div class="card">
+<div class="moon"></div>
+
+<h1>🌙 رمضان كريم</h1>
+<div class="subtitle">العد التنازلي لشهر الرحمة</div>
+
+<div class="timer">
+<div class="unit"><div class="value" id="d">0</div><div class="label">أيام</div></div>
+<div class="unit"><div class="value" id="h">0</div><div class="label">ساعات</div></div>
+<div class="unit"><div class="value" id="m">0</div><div class="label">دقائق</div></div>
+<div class="unit"><div class="value" id="s">0</div><div class="label">ثواني</div></div>
+</div>
+
+<button class="btn" onclick="audioToggle()">🎶 أنشودة رمضان </button>
+</div>
+
+<audio id="audio" loop>
+<source src="m.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const target=new Date("2026-02-18T00:00:00").getTime();
+setInterval(()=>{
+const now=Date.now(),diff=target-now;
+if(diff<0)return;
+d.textContent=Math.floor(diff/86400000);
+h.textContent=Math.floor(diff/3600000)%24;
+m.textContent=Math.floor(diff/60000)%60;
+s.textContent=Math.floor(diff/1000)%60;
+},1000);
+
+const audio=document.getElementById("audio");
+let play=false;
+
+// تشغيل تلقائي بعد أول تفاعل (حل قيود المتصفح)
+document.addEventListener("click",()=>{
+if(!play){
+audio.play().catch(()=>{});
+audio.volume=0.7;
+play=true;
+}
+},{once:true});
+
+function audioToggle(){
+play?audio.pause():audio.play();
+play=!play;
+}
+</script>
+
+</body>
+</html>
