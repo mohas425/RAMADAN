@@ -100,7 +100,40 @@ opacity:.9;
 margin-bottom:30px;
 font-size:clamp(.9em,3vw,1em);
 }
+.subtitl{
+    position: fixed;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    
+    opacity: 0.9;
+    margin: 0;
+    font-size: clamp(.9em, 3vw, 1em);
+    color: #ffd700;
+    text-align: center;
 
+    text-shadow:
+        0 0 5px #ffd700,
+        0 0 15px #ffd700,
+        0 0 30px #ffcc00;
+
+    animation: glow 2s infinite alternate;
+}
+
+@keyframes glow{
+    from{
+        text-shadow:
+            0 0 5px #ffd700,
+            0 0 15px #ffd700,
+            0 0 30px #ffcc00;
+    }
+    to{
+        text-shadow:
+            0 0 10px #fff2a8,
+            0 0 30px #ffd700,
+            0 0 60px #ffae00;
+    }
+}
 /* ⏳ العداد */
 .timer{
 display:grid;
@@ -157,8 +190,10 @@ transition:.3s;
 <div class="moon"></div>
 
 <h1>🌙 رمضان كريم</h1>
-<div class="subtitle">تم تطوير الموقع من قبل أُبي راهم</div>
+<div class="subtitle">العد التنازلي لشهر رمضان</div>
 
+<div class="subtitl">تم تطوير الموقع من قبل أُبي راهم , سطيف - الجزائر</div>
+  
 <div class="timer">
 <div class="unit"><div class="value" id="d">0</div><div class="label">أيام</div></div>
 <div class="unit"><div class="value" id="h">0</div><div class="label">ساعات</div></div>
@@ -204,6 +239,7 @@ play=!play;
 
 </body>
 </html>
+
 
 
 
